@@ -44,14 +44,15 @@
   
 #+BEGIN_SRC emacs-lisp 
 
-(use-package evil
-  :ensure t
-  :config
-  (evil-mode 1))
+  (use-package evil
+    :ensure t
 
-(use-package evil-workman-mode
-  :config
-  (evil-workman-global-mode +1))
+    :config
+    (evil-mode 1))
+
+  (use-package evil-workman-mode
+    :config
+    (evil-workman-global-mode +1))
 
 #+END_SRC
 
@@ -132,12 +133,24 @@
 
 #+BEGIN_SRC emacs-lisp 
 
-(add-to-list 'custom-theme-load-path "~/.emacs.d/themes/")
-(load-theme 'material t)
-(set-default-font "Dejavu Sans Mono 18")
+  (add-to-list 'custom-theme-load-path "~/.emacs.d/themes/")
+  (use-package monokai-theme
+    :ensure t
+    :config
+    (load-theme 'monokai t))
+  (set-default-font "Fira Mono 18")
 
 #+END_SRC
 
+* Shell configurations
+
+#+BEGIN_SRC emacs-lisp
+  (use-package exec-path-from-shell
+    :ensure t
+    :config
+    (when (memq window-system '(mac ns))
+    (exec-path-from-shell-initialize)))
+#+END_SRC
 * Python
 
 #+BEGIN_SRC emacs-lisp
@@ -147,4 +160,23 @@
     :config
     (elpy-enable))
 
+#+END_SRC
+
+* Smartparens
+#+BEGIN_SRC emacs-lisp
+  (use-package smartparens
+    :ensure t
+    :config
+    (use-package smartparens-config)
+    (smartparens-global-mode 1))
+#+END_SRC
+* Javascript Configurations
+#+BEGIN_SRC emacs-lisp
+  (use-package js2-mode
+    :ensure t
+    :init
+    (bind-key "<f12>" 'js2-jump-to-definition)
+    :config
+    (add-to-list 'auto-mode-alist '("\\.js\\'" . js2-mode)))
+    
 #+END_SRC
