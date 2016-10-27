@@ -19,7 +19,7 @@
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
    (quote
-    (smartparens js2-mode monokai-theme exec-path-from-shell emacs-path-from-shell elpy yasnippet which-key use-package try pyvenv org-bullets evil-workman-mode counsel auto-complete ace-window))))
+    (web-mode flycheck smartparens js2-mode monokai-theme exec-path-from-shell emacs-path-from-shell elpy yasnippet which-key use-package try pyvenv org-bullets evil-workman-mode counsel auto-complete ace-window))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
