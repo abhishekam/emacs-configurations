@@ -1,4 +1,10 @@
 #+STARTUP: overview
+* Indentation fix
+  #+BEGIN_SRC emacs-lisp
+    (setq-default indent-tabs-mode nil)
+    (setq tab-width 2) 
+    (setq-default tab-always-indent 'complete) 
+  #+END_SRC
 * Keybindings
 #+BEGIN_SRC emacs-lisp
   (setq mac-command-modifier 'super)
@@ -383,3 +389,31 @@
 
 #+END_SRC
 
+* Undo configurations
+#+BEGIN_SRC emacs-lisp
+  (use-package undo-tree
+  :ensure t
+    :init
+      (global-undo-tree-mode))
+
+#+END_SRC
+* Indent buffer
+#+BEGIN_SRC emacs-lisp
+  (defun indent-buffer ()
+    "Indent the currently visited buffer."
+    (interactive)
+    (indent-region (point-min) (point-max)))
+
+  (defun indent-region-or-buffer ()
+    "Indent a region if selected, otherwise the whole buffer."
+    (interactive)
+    (save-excursion
+      (if (region-active-p)
+          (progn
+            (indent-region (region-beginning) (region-end))
+            (message "Indented selected region."))
+        (progn
+          (indent-buffer)
+          (message "Indented buffer.")))))
+  (global-set-key (kbd "C-M-\\") 'indent-region-or-buffer)
+#+END_SRC
