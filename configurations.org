@@ -163,30 +163,32 @@
 
 #+BEGIN_SRC emacs-lisp 
 
-  ;(add-to-list 'custom-theme-load-path "~/.emacs.d/themes/")
-  ;(use-package monokai-theme
-  ;  :ensure t
-  ;  :config
-  ;  (load-theme 'monokai t))
-  ;(set-default-font "Fira Mono 18")
-  (defvar ha/fixed-font-family
-    (cond ((x-list-fonts "Hasklig")         "Hasklig")
-          ((x-list-fonts "Source Code Pro") "Source Code Pro")
-          ((x-list-fonts "Anonymous Pro")   "Anonymous Pro")
-          ((x-list-fonts "M+ 1mn")          "M+ 1mn"))
-    "My fixed width font based on what is installed, `nil' if not defined.")
-  (when ha/fixed-font-family
-    (set-frame-font ha/fixed-font-family)
-    (set-face-attribute 'default nil :font ha/fixed-font-family :height 150)
-    (set-face-font 'default ha/fixed-font-family))
+    ;(add-to-list 'custom-theme-load-path "~/.emacs.d/themes/")
+    ;(use-package monokai-theme
+    ;  :ensure t
+    ;  :config
+    ;  (load-theme 'monokai t))
+    ;(set-default-font "Fira Mono 18")
+    (defvar ha/fixed-font-family
+      (cond ((x-list-fonts "Hasklig")         "Hasklig")
+            ((x-list-fonts "Source Code Pro") "Source Code Pro")
+            ((x-list-fonts "Anonymous Pro")   "Anonymous Pro")
+            ((x-list-fonts "M+ 1mn")          "M+ 1mn"))
+      "My fixed width font based on what is installed, `nil' if not defined.")
+    (when ha/fixed-font-family
+      (set-frame-font ha/fixed-font-family)
+      (set-face-attribute 'default nil :font ha/fixed-font-family :height 150)
+      (set-face-font 'default ha/fixed-font-family)
+      (set-fontset-font t 'symbol 
+                        (font-spec :family "Apple Color Emoji") nil 'prepend))
 
-  (use-package color-theme
-    :ensure t
-    :init (require 'color-theme)
-    :config (use-package color-theme-sanityinc-tomorrow
-              :ensure t
-              :config
-              (load-theme 'sanityinc-tomorrow-night t)))
+    (use-package color-theme
+      :ensure t
+      :init (require 'color-theme)
+      :config (use-package color-theme-sanityinc-tomorrow
+                :ensure t
+                :config
+                (load-theme 'sanityinc-tomorrow-night t)))
 
 #+END_SRC
 * Flycheck
@@ -194,9 +196,10 @@
   (use-package flycheck
     :ensure t
     :init (global-flycheck-mode))
-  (use-package flycheck-status-emoji
-    :ensure t
-    :init (flycheck-status-emoji-mode t))
+
+   (use-package flycheck-status-emoji
+     :ensure t
+     :init (flycheck-status-emoji-mode t)) 
 #+END_SRC
 * Python
 
@@ -243,6 +246,7 @@
     (add-hook 'js2-mode-hook
               (lambda ()
                 (bind-key "<f12>" 'js2-jump-to-definition)
+                (setq-default js2-basic-offset 2)
                 (flycheck-mode t)
                 (prettify-symbols-mode +1)
                 (when (executable-find "eslint")
@@ -268,6 +272,9 @@
     (add-to-list 'auto-mode-alist '("\\.jsx$" . web-mode))
     (add-hook 'web-mode-hook
               (lambda()
+                (setq web-mode-code-indent-offset 2)
+                (setq web-mode-css-indent-offset 2)
+                (setq web-mode-markup-indent-offset 2)
                 (flycheck-mode t)
                 (flycheck-add-mode 'javascript-eslint 'web-mode)
                 (when (executable-find "eslint")
@@ -284,140 +291,6 @@
     (exec-path-from-shell-initialize)))
 #+END_SRC
  
-* Modeline configurations
-#+BEGIN_SRC emacs-lisp
-  ;; (use-package powerline
-  ;;   :ensure t)
-  ;; (custom-set-faces
-  ;;  '(mode-line-buffer-id ((t (:foreground "#000000" :bold t))))
-  ;;  '(which-func ((t (:foreground "#77aaff"))))
-  ;;  '(mode-line ((t (:foreground "#000000" :background "#dddddd" :box nil))))
-  ;;  '(mode-line-inactive ((t (:foreground "#000000" :background "#bbbbbb" :box nil)))))
-  ;; (defun powerline-simpler-vc-mode (s)
-  ;;   (if s
-  ;;       (replace-regexp-in-string "Git[:-]" "" s)
-  ;;     s))
-
-  ;; ;; Some point, we could change the text of the minor modes, but we
-  ;; ;; need to get the text properties and sub them /back in/. To be
-  ;; ;; figured out later... Like:
-  ;; ;;   (let* ((props (text-properties-at 1 s))
-  ;; ;;          (apple (set-text-properties 0 1 props "⌘"))
-  ;; ;;          (fly-c (set-text-properties 0 1 props "✓"))
-  ;; ;;          (news1 (replace-regexp-in-string "񓵸" apple s)))
-  ;; ;;          (news2 (replace-regexp-in-string "FlyC" fly-c news1)))
-
-  ;; (defun powerline-simpler-minor-display (s)
-  ;;     (replace-regexp-in-string
-  ;;      (concat " " (mapconcat 'identity '("񓵸" "Projectile" "Fill" "BufFace") "\\|")) "" s))
-
-  ;; (defun powerline-ha-theme ()
-  ;;   "A powerline theme that removes many minor-modes that don't serve much purpose on the mode-line."
-  ;;   (interactive)
-  ;;   (setq-default mode-line-format
-  ;;                 '("%e"
-  ;;                   (:eval
-  ;;                    (let*
-  ;;                        ((active
-  ;;                          (powerline-selected-window-active))
-  ;;                         (mode-line
-  ;;                          (if active 'mode-line 'mode-line-inactive))
-  ;;                         (face1
-  ;;                          (if active 'powerline-active1 'powerline-inactive1))
-  ;;                         (face2
-  ;;                          (if active 'powerline-active2 'powerline-inactive2))
-  ;;                         (separator-left
-  ;;                          (intern
-  ;;                           (format "powerline-%s-%s" powerline-default-separator
-  ;;                                   (car powerline-default-separator-dir))))
-  ;;                         (separator-right
-  ;;                          (intern
-  ;;                           (format "powerline-%s-%s" powerline-default-separator
-  ;;                                   (cdr powerline-default-separator-dir))))
-  ;;                         (lhs
-  ;;                          (list
-  ;;                           (powerline-raw "%*" nil 'l)
-  ;;                           ;; (powerline-buffer-size nil 'l)
-  ;;                           (powerline-buffer-id nil 'l)
-  ;;                           (powerline-raw " ")
-  ;;                           (funcall separator-left mode-line face1)
-  ;;                           (powerline-narrow face1 'l)
-  ;;                           (powerline-simpler-vc-mode (powerline-vc face1))))
-  ;;                         (rhs
-  ;;                          (list
-  ;;                           (powerline-raw mode-line-misc-info face1 'r)
-  ;;                           (powerline-raw "%4l" face1 'r)
-  ;;                           (powerline-raw ":" face1)
-  ;;                           (powerline-raw "%3c" face1 'r)
-  ;;                           (funcall separator-right face1 mode-line)
-  ;;                           (powerline-raw " ")
-  ;;                           (powerline-raw "%6p" nil 'r)
-  ;;                           (powerline-hud face2 face1)))
-  ;;                         (center
-  ;;                          (list
-  ;;                           (powerline-raw " " face1)
-  ;;                           (funcall separator-left face1 face2)
-  ;;                           (when
-  ;;                               (boundp 'erc-modified-channels-object)
-  ;;                             (powerline-raw erc-modified-channels-object face2 'l))
-  ;;                           (powerline-major-mode face2 'l)
-  ;;                           (powerline-process face2)
-  ;;                           (powerline-raw " :" face2)
-
-  ;;                           (powerline-simpler-minor-display
-  ;;                            (powerline-minor-modes face2 'l))
-
-  ;;                           (powerline-raw " " face2)
-  ;;                           (funcall separator-right face2 face1))))
-  ;;                      (concat
-  ;;                       (powerline-render lhs)
-  ;;                       (powerline-fill-center face1
-  ;;                                              (/
-  ;;                                               (powerline-width center)
-  ;;                                               2.0))
-  ;;                       (powerline-render center)
-  ;;                       (powerline-fill face1
-  ;;                                       (powerline-width rhs))
-  ;;                       (powerline-render rhs)))))))
-
-  ;; (powerline-ha-theme)
-#+END_SRC
-* Line number configurations 
-#+BEGIN_SRC emacs-lisp
-  (use-package linum
-    :init
-    (add-hook 'prog-mode-hook 'linum-mode)
-    (add-hook 'linum-mode-hook (lambda () (set-face-attribute 'linum nil :height 110)))
-
-    :config
-    (defun linum-fringe-toggle ()
-      "Toggles the line numbers as well as the fringe."    (interactive)
-      (cond (linum-mode (fringe-mode '(0 . 0))
-                        (linum-mode -1))
-            (t          (fringe-mode '(8 . 0))
-                        (linum-mode 1))))
-
-    :bind (("A-C-k"   . linum-mode)
-           ("s-C-k"   . linum-mode)
-           ("A-C-M-k" . linum-fringe-toggle)
-           ("s-C-M-k" . linum-fringe-toggle)))
-
-  (use-package linum-relative
-    :ensure t
-    :config
-    (defun linum-new-mode ()
-      "If line numbers aren't displayed, then display them.
-       Otherwise, toggle between absolute and relative numbers."
-      (interactive)
-      (if linum-mode
-          (linum-relative-toggle)
-        (linum-mode 1)))
-
-    :bind ("A-k" . linum-new-mode)
-          ("s-k" . linum-new-mode))   ;; For Linux
-
-#+END_SRC
-
 * Undo configurations
 #+BEGIN_SRC emacs-lisp
   (use-package undo-tree
@@ -446,3 +319,11 @@
           (message "Indented buffer.")))))
   (global-set-key (kbd "C-M-\\") 'indent-region-or-buffer)
 #+END_SRC
+* Multiple Cursors
+#+BEGIN_SRC emacs-lisp
+    (use-package multiple-cursors
+      :ensure t
+      :config
+      (global-set-key (kbd "C-S-c C-S-c") 'mc/edit-lines))
+#+END_SRC
+
