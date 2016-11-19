@@ -1,17 +1,13 @@
 #+STARTUP: overview
-* Indentation fix
+* Indentation fixes
   #+BEGIN_SRC emacs-lisp
     (setq-default indent-tabs-mode nil)
     (setq tab-width 2) 
     (setq-default tab-always-indent 'complete) 
   #+END_SRC
-* Keybindings
+** Code to indent buffer or region
 #+BEGIN_SRC emacs-lisp
-  (setq mac-command-modifier 'super)
-#+END_SRC
-* Custom Code
-#+BEGIN_SRC emacs-lisp
-  ;; From the link here
+  ;; Allows for indenting a marked region or the entire buffer
   ;; http://emacsredux.com/blog/2013/03/27/indent-region-or-buffer/
   (defun indent-buffer ()
     (interactive)
@@ -28,6 +24,15 @@
           (indent-buffer)
           (message "Indented buffer.")))))
 #+END_SRC
+* Keybindings
+#+BEGIN_SRC emacs-lisp
+  ; Does not seem to work - though
+  (setq mac-command-modifier 'super)
+#+END_SRC
+** Set up indentation key
+   #+BEGIN_SRC  emacs-lisp
+     (global-set-key (kbd "C-M-\\") 'indent-region-or-buffer)
+   #+END_SRC
 * Interface stuff
   
 #+BEGIN_SRC emacs-lisp
@@ -37,7 +42,6 @@
 (defalias 'list-buffers 'ibuffer-other-window)
 (fset 'yes-or-no-p 'y-or-n-p)
 (global-set-key (kbd "<f5>") 'revert-buffer)
-(global-set-key (kbd "C-M-\\") 'indent-region-or-buffer)
 #+END_SRC
 
 * Try
@@ -62,12 +66,10 @@
 * Org mode	     
   
 #+BEGIN_SRC emacs-lisp 
-
 (use-package org-bullets
 	     :ensure t
 	     :config
 	     (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1))))
-
 #+END_SRC
 
 * Evil mode
@@ -180,7 +182,7 @@
       (set-face-attribute 'default nil :font ha/fixed-font-family :height 150)
       (set-face-font 'default ha/fixed-font-family)
       (set-fontset-font t 'symbol 
-                        (font-spec :family "Apple Color Emoji") nil 'prepend))
+                        (font-spec :family "Hasklig") nil 'prepend))
 
     (use-package color-theme
       :ensure t
@@ -191,6 +193,10 @@
                 (load-theme 'sanityinc-tomorrow-night t)))
 
 #+END_SRC
+
+#+RESULTS:
+: t
+
 * Flycheck
 #+BEGIN_SRC emacs-lisp
   (use-package flycheck
@@ -204,7 +210,6 @@
 * Python
 
 #+BEGIN_SRC emacs-lisp
-
   (use-package elpy
     :ensure t
     :init
@@ -212,8 +217,6 @@
     :config
     (elpy-enable)
     (setq python-shell-interpreter "python3"))
-
-
 #+END_SRC
 
 * Smartparens
@@ -298,26 +301,6 @@
     :init
       (global-undo-tree-mode))
 
-#+END_SRC
-* Indent buffer
-#+BEGIN_SRC emacs-lisp
-  (defun indent-buffer ()
-    "Indent the currently visited buffer."
-    (interactive)
-    (indent-region (point-min) (point-max)))
-
-  (defun indent-region-or-buffer ()
-    "Indent a region if selected, otherwise the whole buffer."
-    (interactive)
-    (save-excursion
-      (if (region-active-p)
-          (progn
-            (indent-region (region-beginning) (region-end))
-            (message "Indented selected region."))
-        (progn
-          (indent-buffer)
-          (message "Indented buffer.")))))
-  (global-set-key (kbd "C-M-\\") 'indent-region-or-buffer)
 #+END_SRC
 * Multiple Cursors
 #+BEGIN_SRC emacs-lisp
