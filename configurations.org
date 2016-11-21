@@ -302,11 +302,23 @@
       (global-undo-tree-mode))
 
 #+END_SRC
-* Multiple Cursors
+* Blog
 #+BEGIN_SRC emacs-lisp
-    (use-package multiple-cursors
-      :ensure t
-      :config
-      (global-set-key (kbd "C-S-c C-S-c") 'mc/edit-lines))
+  (use-package org-page
+    :ensure t
+    :config
+    (setq op/repository-directory "~/MyBlog/notebookOfThoughts")
+    (setq op/site-domain "http://abhishekam.github.io")
+    (setq op/personal-github-link "https://github.com/abhishekam")
+    (setq op/site-main-title "Notebook of thoughts")
+    (setq op/site-sub-title "...")
+    (setq op/personal-disqus-shortname "notebookofthoughts")
+    )
 #+END_SRC
-
+* Magit status
+#+BEGIN_SRC emacs-lisp
+  (use-package magit
+    :ensure t
+    :bind
+    ("C-x g" . magit-status))
+#+END_SRC
