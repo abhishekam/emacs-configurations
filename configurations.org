@@ -322,3 +322,38 @@
     :bind
     ("C-x g" . magit-status))
 #+END_SRC
+* Line number configurations 
+#+BEGIN_SRC emacs-lisp
+  (use-package linum
+    :init
+    (add-hook 'prog-mode-hook 'linum-mode)
+    (add-hook 'linum-mode-hook (lambda () (set-face-attribute 'linum nil :height 110)))
+
+    :config
+    (defun linum-fringe-toggle ()
+      "Toggles the line numbers as well as the fringe."    (interactive)
+      (cond (linum-mode (fringe-mode '(0 . 0))
+                        (linum-mode -1))
+            (t          (fringe-mode '(8 . 0))
+                        (linum-mode 1))))
+
+    :bind (("A-C-k"   . linum-mode)
+           ("s-C-k"   . linum-mode)
+           ("A-C-M-k" . linum-fringe-toggle)
+           ("s-C-M-k" . linum-fringe-toggle)))
+
+  (use-package linum-relative
+    :ensure t
+    :config
+    (defun linum-new-mode ()
+      "If line numbers aren't displayed, then display them.
+       Otherwise, toggle between absolute and relative numbers."
+      (interactive)
+      (if linum-mode
+          (linum-relative-toggle)
+        (linum-mode 1)))
+
+    :bind ("A-k" . linum-new-mode)
+          ("s-k" . linum-new-mode))   ;; For Linux
+
+#+END_SRC
