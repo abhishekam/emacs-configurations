@@ -165,37 +165,34 @@
 
 #+BEGIN_SRC emacs-lisp 
 
-    ;(add-to-list 'custom-theme-load-path "~/.emacs.d/themes/")
-    ;(use-package monokai-theme
-    ;  :ensure t
-    ;  :config
-    ;  (load-theme 'monokai t))
-    ;(set-default-font "Fira Mono 18")
-    (defvar ha/fixed-font-family
-      (cond ((x-list-fonts "Hasklig")         "Hasklig")
-            ((x-list-fonts "Source Code Pro") "Source Code Pro")
-            ((x-list-fonts "Anonymous Pro")   "Anonymous Pro")
-            ((x-list-fonts "M+ 1mn")          "M+ 1mn"))
-      "My fixed width font based on what is installed, `nil' if not defined.")
-    (when ha/fixed-font-family
-      (set-frame-font ha/fixed-font-family)
-      (set-face-attribute 'default nil :font ha/fixed-font-family :height 150)
-      (set-face-font 'default ha/fixed-font-family)
-      (set-fontset-font t 'symbol 
-                        (font-spec :family "Hasklig") nil 'prepend))
+  ;(add-to-list 'custom-theme-load-path "~/.emacs.d/themes/")
+  ;(use-package monokai-theme
+  ;  :ensure t
+  ;  :config
+  ;  (load-theme 'monokai t))
+  ;(set-default-font "Fira Mono 18")
+  (defvar ha/fixed-font-family
+    (cond ((x-list-fonts "Source Code Pro") "Source Code Pro")
+          ((x-list-fonts "Anonymous Pro")   "Anonymous Pro")
+          ((x-list-fonts "M+ 1mn")          "M+ 1mn"))
+    "My fixed width font based on what is installed, `nil' if not defined.")
+  (when ha/fixed-font-family
+    (set-frame-font ha/fixed-font-family)
+    (set-face-attribute 'default nil :font ha/fixed-font-family :height 170)
+    (set-face-font 'default ha/fixed-font-family)
+    (set-fontset-font t 'symbol 
+                      (font-spec :family "Hasklig") nil 'prepend))
 
-    (use-package color-theme
-      :ensure t
-      :init (require 'color-theme)
-      :config (use-package color-theme-sanityinc-tomorrow
-                :ensure t
-                :config
-                (load-theme 'sanityinc-tomorrow-night t)))
+  (use-package color-theme
+    :ensure t
+    :init (require 'color-theme)
+    :config (use-package base16-theme
+              :ensure t
+              :config
+              (load-theme 'base16-tomorrow-night t)))
+  (setq-default line-spacing 10)
 
 #+END_SRC
-
-#+RESULTS:
-: t
 
 * Flycheck
 #+BEGIN_SRC emacs-lisp
@@ -251,6 +248,8 @@
                 (bind-key "<f12>" 'js2-jump-to-definition)
                 (setq-default js2-basic-offset 2)
                 (flycheck-mode t)
+                (setq flycheck-disabled-checkers '(javascript-jshint))
+                (setq flycheck-checkers '(javascript-eslint))
                 (prettify-symbols-mode +1)
                 (when (executable-find "eslint")
                   (flycheck-select-checker 'javascript-eslint))
@@ -313,6 +312,9 @@
     (setq op/site-main-title "Notebook of thoughts")
     (setq op/site-sub-title "...")
     (setq op/personal-disqus-shortname "notebookofthoughts")
+    (setq op/theme-root-directory "~/MyBlog/themesForOrgBlog/themes")
+    (setq op/item-cache nil) 
+    (setq op/theme 'martin)
     )
 #+END_SRC
 * Magit status
@@ -375,5 +377,18 @@
     :ensure t
     :config
     (global-set-key (kbd "C-<") 'mc/mark-previous-like-this)
-    (global-set-key (kbd "C->") 'mc/mark-next-like-this)
+    (global-set-key (kbd "C->") 'mc/mark-next-like-this))
+#+END_SRC
+* projectile
+#+BEGIN_SRC emacs-lisp
+  (use-package projectile
+    :ensure t
+    :config
+    (projectile-mode)
+    )
+#+END_SRC
+* typing
+#+BEGIN_SRC emacs-lisp
+  (use-package typing
+    :ensure t)
 #+END_SRC
