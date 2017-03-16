@@ -1,8 +1,11 @@
 
 (require 'package)
 (setq package-enable-at-startup nil)
-(add-to-list 'package-archives
-	     '("melpa" . (if (string-equal system-type "windows-nt") "http://melpa.org/packages/" "https://melpa.org/packages/")))
+(cond
+ ((string-equal system-type "windows-nt")
+  (add-to-list 'package-archives '("melpa" . "http://melpa.org/packages/")))
+ ((string-equal system-type "Mac OS X")
+  (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/"))))
 (package-initialize)
 
 ;; Bootstrap 'use-package'
