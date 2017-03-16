@@ -2,7 +2,7 @@
 (require 'package)
 (setq package-enable-at-startup nil)
 (add-to-list 'package-archives
-	     '("melpa" . "https://melpa.org/packages/"))
+	     '("melpa" . (if (string-equal system-type "windows-nt") "http://melpa.org/packages/" "https://melpa.org/packages/")))
 (package-initialize)
 
 ;; Bootstrap 'use-package'
@@ -19,7 +19,7 @@
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
    (quote
-    (web-mode flycheck smartparens js2-mode monokai-theme exec-path-from-shell emacs-path-from-shell elpy yasnippet which-key use-package try pyvenv org-bullets evil-workman-mode counsel auto-complete ace-window))))
+    (base16-theme gruvbox-theme typing projectile web-mode flycheck smartparens js2-mode monokai-theme exec-path-from-shell emacs-path-from-shell elpy yasnippet which-key use-package try pyvenv org-bullets evil-workman-mode counsel auto-complete ace-window))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
