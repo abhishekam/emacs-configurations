@@ -4,7 +4,7 @@
 (cond
  ((string-equal system-type "windows-nt")
   (add-to-list 'package-archives '("melpa" . "http://melpa.org/packages/")))
- ((string-equal system-type "Mac OS X")
+ ((string-equal system-type "darwin")
   (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/"))))
 (package-initialize)
 
